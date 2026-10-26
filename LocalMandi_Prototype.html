@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Local Mandi – Fair Price • Trusted Deals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #0F3D2E;
+      --green-mid: #1A5C45;
+      --green-bright: #22A06B;
+      --green-soft: #E6F5EE;
+      --orange: #E85D04;
+      --orange-soft: #FFF4EC;
+      --cream: #F6F7F4;
+      --white: #FFFFFF;
+      --dark: #0C1A14;
+      --muted: #5C6B63;
+      --border: #E2E8E4;
+      --shadow: 0 1px 2px rgba(15,61,46,0.04), 0 4px 16px rgba(15,61,46,0.06);
+      --shadow-lg: 0 8px 32px rgba(15,61,46,0.12);
+      --radius: 16px;
+      --radius-sm: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      min-height: 100vh;
+      padding-bottom: 76px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.01em;
+      line-height: 1.45;
+    }
+    a { color: inherit; text-decoration: none; }
+    .app-header {
+      background: linear-gradient(145deg, #0F3D2E 0%, #1A5C45 55%, #1B6B4F 100%);
+      color: white;
+      padding: 14px 18px 18px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 24px rgba(15,61,46,0.25);
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-icon {
+      width: 42px; height: 42px;
+      background: rgba(255,255,255,0.14);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .brand-text h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.3px; }
+    .brand-text p { font-size: 0.65rem; opacity: 0.85; font-weight: 500; }
+    .location-chip {
+      background: rgba(255,255,255,0.14);
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: flex; align-items: center; gap: 4px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .search-bar {
+      background: rgba(255,255,255,0.96);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      margin-top: 4px;
+    }
+    .search-bar input {
+      border: none; outline: none; flex: 1;
+      font-size: 0.9rem; color: var(--dark);
+      background: transparent; font-family: inherit;
+    }
+    .page { display: none; padding: 20px 18px 28px; max-width: 480px; margin: 0 auto; }
+    .page.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .section-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .section-head h2 { font-size: 1.08rem; font-weight: 750; color: var(--green); letter-spacing: -0.02em; }
+    .section-head .link { font-size: 0.8rem; color: var(--orange); font-weight: 600; cursor: pointer; }
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .card-lg { padding: 16px; }
+    .greeting { margin-bottom: 16px; }
+    .greeting h2 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.03em; }
+    .greeting p { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+    .quick-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .quick-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 16px 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .quick-card:active { transform: scale(0.97); }
+    .quick-card .q-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .quick-card h3 { font-size: 0.85rem; font-weight: 700; }
+    .quick-card p { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+    .stat-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .stat-box {
+      flex: 1;
+      background: linear-gradient(160deg, #1A5C45, #0F3D2E);
+      color: white;
+      border-radius: var(--radius-sm);
+      padding: 14px 10px;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(15,61,46,0.2);
+    }
+    .stat-box .num { font-size: 1.2rem; font-weight: 800; }
+    .stat-box .lbl { font-size: 0.65rem; opacity: 0.85; margin-top: 2px; }
+    .crop-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .crop-title { font-weight: 700; font-size: 1rem; }
+    .crop-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .live-dot {
+      background: var(--green-soft);
+      color: var(--green-mid);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+    .grade-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .grade-table th {
+      text-align: left; padding: 7px 4px;
+      background: #F5F2ED; color: var(--muted);
+      font-weight: 600; font-size: 0.7rem;
+    }
+    .grade-table td { padding: 9px 4px; border-bottom: 1px solid #F0EBE3; }
+    .grade-table tr:last-child td { border-bottom: none; }
+    .price-val { font-weight: 800; color: var(--orange); font-size: 1rem; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .badge {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 8px;
+    }
+    .badge-a { background: var(--green-soft); color: #1A5C45; }
+    .badge-b { background: var(--orange-soft); color: #C2410C; }
+    .badge-c { background: #FEE2E2; color: #B91C1C; }
+    .buyer-row { display: flex; gap: 12px; align-items: flex-start; }
+    .avatar {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: linear-gradient(145deg, #1A5C45, #0F3D2E); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .buyer-meta { flex: 1; }
+    .buyer-name { font-weight: 700; font-size: 0.92rem; }
+    .stars { color: #F9A825; font-size: 0.8rem; letter-spacing: 0.5px; }
+    .rel { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .tags { margin-top: 6px; }
+    .tag {
+      display: inline-block; font-size: 0.68rem;
+      background: #F0EBE3; color: var(--muted);
+      padding: 2px 7px; border-radius: 6px; margin: 0 3px 3px 0;
+    }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 16px; border-radius: 12px;
+      font-size: 0.8rem; font-weight: 650;
+      border: none; cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.12s ease, opacity 0.12s ease;
+    }
+    .btn:active { transform: scale(0.97); opacity: 0.92; }
+    .btn-primary {
+      background: linear-gradient(135deg, #F48C06, #E85D04);
+      color: white;
+      box-shadow: 0 4px 12px rgba(232,93,4,0.28);
+    }
+    .btn-outline {
+      background: var(--white); color: var(--green);
+      border: 1.5px solid var(--green-mid);
+    }
+    .btn-block { width: 100%; padding: 14px; font-size: 0.92rem; border-radius: 14px; }
+    .btn-sm { padding: 8px 12px; font-size: 0.72rem; border-radius: 10px; }
+    .demand-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 11px 0; border-bottom: 1px solid #F0EBE3;
+    }
+    .demand-row:last-child { border-bottom: none; }
+    .demand-crop { font-weight: 600; font-size: 0.9rem; }
+    .demand-period { font-size: 0.7rem; color: var(--muted); }
+    .status-shortage { color: #C62828; font-weight: 700; font-size: 0.78rem; }
+    .status-stable { color: #2E7D32; font-weight: 700; font-size: 0.78rem; }
+    .status-high { color: #EF6C00; font-weight: 700; font-size: 0.78rem; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block; font-size: 0.75rem; font-weight: 600;
+      color: var(--muted); margin-bottom: 5px;
+    }
+    .form-group select, .form-group input, .form-group textarea {
+      width: 100%; padding: 13px 14px;
+      border: 1.5px solid var(--border); border-radius: 12px;
+      font-size: 0.92rem; background: var(--white); color: var(--dark);
+      font-family: inherit; transition: border-color 0.15s;
+    }
+    .form-group select:focus, .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--green);
+    }
+    .success-box {
+      display: none;
+      background: var(--green-soft); color: var(--green);
+      padding: 14px; border-radius: 10px; text-align: center;
+      font-weight: 600; font-size: 0.9rem; margin-top: 12px;
+    }
+    .step { display: flex; gap: 12px; margin-bottom: 16px; }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--green); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .step-body h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 3px; }
+    .step-body p { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+    .feature-list { list-style: none; }
+    .feature-list li {
+      padding: 10px 0; border-bottom: 1px solid #F0EBE3;
+      font-size: 0.88rem; display: flex; gap: 10px; align-items: flex-start;
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 200;
+      align-items: flex-end; justify-content: center;
+    }
+    .overlay.show { display: flex; }
+    .sheet {
+      background: var(--white); border-radius: 24px 24px 0 0;
+      padding: 22px 20px 32px; width: 100%; max-width: 480px;
+      max-height: 88vh; overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    .sheet-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .sheet-head h3 { font-size: 1.05rem; font-weight: 700; color: var(--green); }
+    .close-x {
+      background: #F0EBE3; border: none; width: 32px; height: 32px;
+      border-radius: 50%; font-size: 1.2rem; cursor: pointer; color: var(--muted);
+    }
+    .trust-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 14px 0;
+    }
+    .trust-box {
+      background: #F8F5F0; border-radius: 10px; padding: 10px; text-align: center;
+    }
+    .trust-box .t-val { font-weight: 800; font-size: 1rem; color: var(--green); }
+    .trust-box .t-lbl { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+    .review {
+      background: #F8F5F0; border-radius: 10px; padding: 10px; margin-bottom: 8px;
+    }
+    .review .r-name { font-weight: 600; font-size: 0.85rem; }
+    .review .r-text { font-size: 0.8rem; color: var(--muted); margin-top: 3px; }
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-around;
+      padding: 8px 4px 12px; z-index: 100;
+      box-shadow: 0 -4px 24px rgba(15,61,46,0.06);
+    }
+    .nav-btn {
+      flex: 1; text-align: center; background: none; border: none;
+      cursor: pointer; padding: 6px 2px; color: var(--muted);
+      font-size: 0.62rem; font-weight: 550; font-family: inherit;
+    }
+    .nav-btn.active { color: var(--green-mid); font-weight: 700; }
+    .nav-btn .n-icon { display: block; font-size: 1.28rem; margin-bottom: 3px; }
+    .tip-box {
+      background: linear-gradient(135deg, #E6F5EE 0%, #F0FAF5 100%);
+      border: 1px solid #B8E0CC;
+      border-radius: var(--radius); padding: 14px 16px; margin-top: 14px;
+    }
+    .tip-box strong { color: var(--green); font-size: 0.85rem; }
+    .tip-box p { font-size: 0.8rem; color: var(--dark); margin-top: 4px; line-height: 1.4; }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .menu-btn {
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.12);
+      color: white; width: 38px; height: 38px; border-radius: 12px;
+      font-size: 1.2rem; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; line-height: 1;
+      backdrop-filter: blur(8px);
+    }
+    .menu-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.4);
+    }
+    .menu-overlay.show { display: block; }
+    .app-menu {
+      position: absolute; top: 58px; right: 14px;
+      background: var(--white); border-radius: 18px;
+      box-shadow: var(--shadow-lg);
+      width: 252px; overflow: hidden;
+      animation: menuIn 0.2s ease;
+      border: 1px solid var(--border);
+    }
+    @keyframes menuIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+    .menu-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px; border: none; background: none;
+      width: 100%; text-align: left; font-size: 0.9rem;
+      color: var(--dark); cursor: pointer; font-weight: 500;
+      border-bottom: 1px solid #F0EBE3;
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item:active { background: #F7F4EF; }
+    .menu-item .mi-icon { font-size: 1.15rem; width: 24px; text-align: center; }
+    .menu-item .mi-arrow { margin-left: auto; color: var(--muted); font-size: 0.85rem; }
+    .menu-section-label {
+      padding: 8px 16px 4px; font-size: 0.68rem; color: var(--muted);
+      font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px; border: none; background: none;
+      width: 100%; text-align: left; font-size: 0.88rem;
+      color: var(--dark); cursor: pointer;
+    }
+    .lang-option.active { background: #E8F5E9; color: var(--green); font-weight: 700; }
+    .lang-option .check { margin-left: auto; color: var(--green); }
+    .profile-sheet .avatar-lg {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--green); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; font-weight: 700; margin: 0 auto 10px;
+    }
+
+
+    .chart-box {
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid #F0EBE3;
+    }
+    .chart-box h4 {
+      font-size: 0.72rem; color: var(--muted); font-weight: 600;
+      margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .bar-chart {
+      display: flex; align-items: flex-end; gap: 6px; height: 90px;
+      padding: 0 2px;
+    }
+    .bar-col {
+      flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%;
+      justify-content: flex-end;
+    }
+    .bar {
+      width: 100%; max-width: 26px; border-radius: 6px 6px 3px 3px;
+      background: linear-gradient(180deg, #22A06B, #0F3D2E);
+      min-height: 4px; transition: height 0.3s;
+    }
+    .bar.today { background: linear-gradient(180deg, #F48C06, #E85D04); }
+    .bar-label {
+      font-size: 0.58rem; color: var(--muted); margin-top: 4px; text-align: center;
+    }
+    .bar-val {
+      font-size: 0.58rem; color: var(--dark); font-weight: 600; margin-bottom: 2px;
+    }
+    .subsidy-card {
+      background: white; border-radius: 14px; padding: 14px;
+      margin-bottom: 12px; border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .subsidy-card h3 {
+      font-size: 0.95rem; font-weight: 700; color: var(--green); margin-bottom: 4px;
+    }
+    .subsidy-card .sub-dept {
+      font-size: 0.72rem; color: var(--muted); margin-bottom: 8px;
+    }
+    .subsidy-card p {
+      font-size: 0.82rem; color: var(--dark); line-height: 1.4; margin-bottom: 8px;
+    }
+    .sub-amount {
+      display: inline-block; background: #E8F5E9; color: #1B4332;
+      font-weight: 700; font-size: 0.8rem; padding: 4px 10px; border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .sub-tags { margin-top: 6px; }
+    .sub-tag {
+      display: inline-block; font-size: 0.65rem; background: #FFF3E0; color: #D35400;
+      padding: 2px 7px; border-radius: 6px; margin: 0 3px 3px 0; font-weight: 600;
+    }
+
+
+    .crop-meta-row {
+      display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 10px;
+    }
+    .meta-chip {
+      font-size: 0.68rem; background: #F5F2ED; color: var(--muted);
+      padding: 3px 8px; border-radius: 8px; font-weight: 500;
+    }
+    .meta-chip strong { color: var(--dark); }
+    .mandi-compare {
+      margin-top: 10px; padding-top: 10px; border-top: 1px solid #F0EBE3;
+      font-size: 0.75rem;
+    }
+    .mandi-compare h4 {
+      font-size: 0.72rem; color: var(--muted); font-weight: 600;
+      margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .mandi-row {
+      display: flex; justify-content: space-between; padding: 4px 0;
+      color: var(--dark);
+    }
+    .mandi-row .dist { color: var(--muted); font-size: 0.7rem; }
+    .grade-note {
+      font-size: 0.7rem; color: var(--muted); margin-top: 8px;
+      line-height: 1.35;
+    }
+    .trend-up { color: #2E7D32; font-weight: 600; }
+    .trend-down { color: #C62828; font-weight: 600; }
+
+
+    /* Splash & Onboarding */
+    .splash {
+      position: fixed; inset: 0; z-index: 9999;
+      background: linear-gradient(160deg, #0F3D2E 0%, #1A5C45 50%, #22A06B 140%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: white; transition: opacity 0.4s;
+    }
+    .splash.hide { opacity: 0; pointer-events: none; }
+    .splash-logo { font-size: 3.5rem; margin-bottom: 12px; }
+    .splash h1 { font-size: 1.8rem; font-weight: 800; }
+    .splash p { opacity: 0.85; margin-top: 6px; font-size: 0.9rem; }
+    .onboard {
+      position: fixed; inset: 0; z-index: 9998; background: var(--cream);
+      display: none; flex-direction: column; padding: 24px 20px 32px;
+    }
+    .onboard.show { display: flex; }
+    .onboard-slide { flex: 1; display: none; flex-direction: column; justify-content: center; text-align: center; }
+    .onboard-slide.active { display: flex; }
+    .onboard-icon { font-size: 4rem; margin-bottom: 16px; }
+    .onboard h2 { font-size: 1.35rem; color: var(--green); margin-bottom: 10px; }
+    .onboard p { color: var(--muted); font-size: 0.95rem; line-height: 1.5; max-width: 300px; margin: 0 auto; }
+    .onboard-dots { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
+    .onboard-dots span { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
+    .onboard-dots span.on { background: var(--green); width: 20px; border-radius: 4px; }
+    .onboard-actions { display: flex; gap: 10px; }
+    .onboard-actions .btn { flex: 1; }
+
+    /* Auth */
+    .auth-screen {
+      position: fixed; inset: 0; z-index: 9990; background: var(--cream);
+      display: none; flex-direction: column; padding: 40px 24px 24px;
+    }
+    .auth-screen.show { display: flex; }
+    .auth-screen h2 { color: var(--green); margin-bottom: 6px; }
+    .auth-screen .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+    .otp-boxes { display: flex; gap: 10px; justify-content: center; margin: 16px 0 24px; }
+    .otp-boxes input {
+      width: 48px; height: 52px; text-align: center; font-size: 1.3rem; font-weight: 700;
+      border: 2px solid var(--border); border-radius: 12px;
+    }
+    .otp-boxes input:focus { border-color: var(--green); outline: none; }
+
+    /* Offline */
+    .offline-bar {
+      display: none; background: #5D4037; color: white; text-align: center;
+      padding: 8px; font-size: 0.8rem; font-weight: 600; position: sticky; top: 0; z-index: 150;
+    }
+    .offline-bar.show { display: block; }
+
+    /* Dark mode */
+    body.dark {
+      --cream: #0A0F0D; --white: #141A17; --dark: #E8F0EC; --muted: #8A9A92;
+      --border: #24302A; --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.25);
+      --green-soft: #152920; --orange-soft: #2A1A10;
+    }
+    body.dark .app-header { background: linear-gradient(135deg, #0D2818, #1B4332); }
+    body.dark .card, body.dark .quick-card, body.dark .subsidy-card { background: #1E1E1E; }
+    body.dark .bottom-nav, body.dark .search-bar { background: #1A1A1A; }
+    body.dark .search-bar input { color: #E8E8E8; }
+    body.dark .grade-table th { background: #2A2A2A; }
+    body.dark .app-menu, body.dark .sheet { background: #1E1E1E; color: #E8E8E8; }
+    body.dark .menu-item { color: #E8E8E8; border-color: #333; }
+    body.dark .tip-box { background: #1B3D2F; border-color: #2D6A4F; }
+    body.dark .trust-box, body.dark .review { background: #2A2A2A; }
+    body.dark .btn-outline { background: #1E1E1E; }
+
+    /* Notifications */
+    .notif-item {
+      display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-icon { font-size: 1.4rem; }
+    .notif-body { flex: 1; }
+    .notif-body h4 { font-size: 0.88rem; font-weight: 600; }
+    .notif-body p { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .notif-time { font-size: 0.68rem; color: var(--muted); }
+    .notif-badge {
+      position: absolute; top: 4px; right: 4px; background: #E74C3C; color: white;
+      font-size: 0.6rem; font-weight: 700; min-width: 16px; height: 16px;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .icon-btn { position: relative; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.12); color: white;
+      width: 38px; height: 38px; border-radius: 12px; font-size: 1.05rem; cursor: pointer;
+      backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
+
+    /* Map */
+    .map-wrap {
+      height: 220px; border-radius: 12px; overflow: hidden; background: #E8E8E8;
+      margin-bottom: 12px; position: relative;
+    }
+    .map-wrap iframe { width: 100%; height: 100%; border: 0; }
+    .map-pin-list .card { margin-bottom: 8px; }
+
+    /* Sell form extras */
+    .grade-select {
+      display: flex; gap: 8px; margin-top: 6px;
+    }
+    .grade-select label {
+      flex: 1; text-align: center; padding: 10px 4px; border: 1.5px solid var(--border);
+      border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600;
+    }
+    .grade-select input { display: none; }
+    .grade-select input:checked + span,
+    .grade-select label:has(input:checked) {
+      border-color: var(--green); background: var(--green-soft); color: var(--green);
+    }
+
+    /* Deal flow */
+    .deal-steps { display: flex; gap: 6px; margin-bottom: 16px; }
+    .deal-step {
+      flex: 1; text-align: center; font-size: 0.7rem; padding: 8px 4px;
+      background: #F0EBE3; border-radius: 8px; color: var(--muted); font-weight: 600;
+    }
+    .deal-step.on { background: var(--green); color: white; }
+    .deal-step.done { background: #A8D5A2; color: var(--green); }
+
+    .fab {
+      position: fixed; bottom: 84px; right: 18px; z-index: 90;
+      width: 58px; height: 58px; border-radius: 18px; border: none;
+      background: linear-gradient(135deg, #F48C06, #E85D04);
+      color: white; font-size: 1.6rem; font-weight: 300;
+      box-shadow: 0 8px 24px rgba(232,93,4,0.35); cursor: pointer;
+    }
+    body.dark .fab { box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+
+    .refresh-live {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.75rem; color: var(--orange); font-weight: 600;
+      background: none; border: none; cursor: pointer; margin-left: 8px;
+    }
+
+
+    /* Professional Profile */
+    .profile-hero {
+      background: linear-gradient(145deg, #0F3D2E 0%, #1A5C45 100%);
+      border-radius: 18px;
+      padding: 20px 18px;
+      color: white;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-hero::after {
+      content: '';
+      position: absolute; right: -20px; bottom: -30px;
+      width: 120px; height: 120px; border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .profile-hero-top {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+    .profile-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      border: 2.5px solid rgba(255,255,255,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 700; flex-shrink: 0;
+    }
+    .profile-hero h3 { font-size: 1.15rem; font-weight: 750; letter-spacing: -0.02em; }
+    .profile-hero .role { font-size: 0.78rem; opacity: 0.85; margin-top: 2px; }
+    .kyc-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(34,160,107,0.95); color: white;
+      font-size: 0.68rem; font-weight: 700; padding: 3px 8px;
+      border-radius: 20px; margin-top: 6px;
+    }
+    .profile-stats {
+      display: flex; gap: 0; position: relative; z-index: 1;
+      border-top: 1px solid rgba(255,255,255,0.15); padding-top: 14px;
+    }
+    .profile-stat {
+      flex: 1; text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.12);
+    }
+    .profile-stat:last-child { border-right: none; }
+    .profile-stat .ps-val { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+    .profile-stat .ps-lbl { font-size: 0.65rem; opacity: 0.8; margin-top: 2px; }
+    .trust-grid-3 {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px;
+    }
+    .trust-cell {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px 10px; text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .trust-cell .tc-icon { font-size: 1.2rem; margin-bottom: 6px; }
+    .trust-cell .tc-val { font-size: 0.95rem; font-weight: 750; color: var(--green); }
+    .trust-cell .tc-lbl { font-size: 0.65rem; color: var(--muted); margin-top: 3px; line-height: 1.3; }
+    .review-row {
+      display: flex; gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .review-row:last-child { border-bottom: none; }
+    .review-av {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(145deg, #1A5C45, #0F3D2E);
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+    }
+    .review-body { flex: 1; min-width: 0; }
+    .review-body .rb-name { font-weight: 650; font-size: 0.88rem; }
+    .review-body .rb-meta { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
+    .review-body .rb-text { font-size: 0.8rem; color: var(--dark); margin-top: 4px; line-height: 1.4; }
+    .review-stars { color: #E5A100; font-size: 0.75rem; letter-spacing: 1px; }
+    .profile-actions { display: flex; gap: 10px; margin-top: 4px; margin-bottom: 14px; }
+    .profile-actions .btn { flex: 1; }
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .il { color: var(--muted); font-size: 0.8rem; }
+    .info-row .iv { font-weight: 650; text-align: right; }
+
+  </style>
+</head>
+<body>
+
+  <!-- SPLASH -->
+  <div class="splash" id="splash">
+    <div class="splash-logo">🌾</div>
+    <h1>Local Mandi</h1>
+    <p>Fair Price • Trusted Deals</p>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div class="onboard" id="onboard">
+    <div class="onboard-slide active" data-slide="0">
+      <div class="onboard-icon">💰</div>
+      <h2>Live Local Prices</h2>
+      <p>See crop rates by quality grade (A/B/C) from your nearby mandi.</p>
+    </div>
+    <div class="onboard-slide" data-slide="1">
+      <div class="onboard-icon">✅</div>
+      <h2>Trusted Buyers</h2>
+      <p>Connect only with KYC-verified local millers & traders with ratings.</p>
+    </div>
+    <div class="onboard-slide" data-slide="2">
+      <div class="onboard-icon">🛡️</div>
+      <h2>Safe Deals</h2>
+      <p>Payment history, complaints support, and fair deal flow built in.</p>
+    </div>
+    <div class="onboard-dots"><span class="on"></span><span></span><span></span></div>
+    <div class="onboard-actions">
+      <button class="btn btn-outline" onclick="skipOnboard()">Skip</button>
+      <button class="btn btn-primary" id="onboardNext" onclick="nextOnboard()">Next</button>
+    </div>
+  </div>
+
+  <!-- LOGIN / OTP -->
+  <div class="auth-screen" id="authScreen">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:2.5rem">🌾</div>
+      <h2>Local Mandi</h2>
+      <p class="sub" id="authSub">Login with mobile number</p>
+    </div>
+    <div id="phoneStep">
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="tel" id="loginPhone" placeholder="10-digit mobile" maxlength="10" />
+      </div>
+      <button class="btn btn-primary btn-block" onclick="sendOTP()">Send OTP</button>
+    </div>
+    <div id="otpStep" style="display:none">
+      <p style="text-align:center;font-size:0.85rem;color:var(--muted);margin-bottom:8px">OTP sent to <strong id="otpPhoneShow"></strong></p>
+      <div class="otp-boxes">
+        <input maxlength="1" inputmode="numeric" oninput="otpTab(this,1)" />
+        <input maxlength="1" inputmode="numeric" oninput="otpTab(this,2)" />
+        <input maxlength="1" inputmode="numeric" oninput="otpTab(this,3)" />
+        <input maxlength="1" inputmode="numeric" oninput="otpTab(this,4)" />
+      </div>
+      <button class="btn btn-primary btn-block" onclick="verifyOTP()">Verify & Login</button>
+      <button class="btn btn-outline btn-block" style="margin-top:8px" onclick="backToPhone()">Change Number</button>
+      <p style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:12px">Demo OTP: <strong>1234</strong></p>
+    </div>
+  </div>
+
+  <!-- OFFLINE BAR -->
+  <div class="offline-bar" id="offlineBar">📡 You are offline — showing saved data</div>
+
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-icon">🌾</div>
+        <div class="brand-text">
+          <h1>Local Mandi</h1>
+          <p>Fair Price • Trusted Deals</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="location-chip" data-i18n="location">📍 Raipur, CG</div>
+        <button class="icon-btn" onclick="openNotifs()" aria-label="Notifications">🔔<span class="notif-badge" id="notifBadge">3</span></button>
+        <button class="menu-btn" onclick="openMenu()" aria-label="Menu">⋮</button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" id="globalSearch" placeholder="Search crop or buyer..." oninput="handleSearch()" />
+    </div>
+  </header>
+
+  <!-- HOME -->
+  <div id="home" class="page active">
+    <div class="greeting">
+      <h2>नमस्ते, किसान भाई 🙏</h2>
+      <p>आज का स्थानीय मंडी भाव और भरोसेमंद खरीदार</p>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="num">4</div><div class="lbl">Crops Live</div></div>
+      <div class="stat-box"><div class="num">12</div><div class="lbl">Verified Buyers</div></div>
+      <div class="stat-box"><div class="num">94%</div><div class="lbl">On-time Pay</div></div>
+    </div>
+    <div class="quick-grid">
+      <div class="quick-card" onclick="goTo('prices')"><div class="q-icon">💰</div><h3>Live Prices</h3><p>Grade-wise rates</p></div>
+      <div class="quick-card" onclick="goTo('buyers')"><div class="q-icon">🏪</div><h3>Local Buyers</h3><p>Verified & rated</p></div>
+      <div class="quick-card" onclick="goTo('demand')"><div class="q-icon">📈</div><h3>Demand Outlook</h3><p>3–6 month forecast</p></div>
+      <div class="quick-card" onclick="goTo('support')"><div class="q-icon">🛡️</div><h3>Support</h3><p>Unpaid / complaint</p></div>
+      <div class="quick-card" onclick="goTo('subsidy')"><div class="q-icon">🏛️</div><h3>Subsidy</h3><p>Govt schemes</p></div>
+    </div>
+    <div class="section-head"><h2>Today’s Top Prices</h2><span class="link" onclick="goTo('prices')">See all →</span></div>
+    <div class="card" onclick="goTo('prices')">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-weight:700">🌾 Wheat (Grade A)</div><div style="font-size:0.75rem;color:var(--muted)">Premium quality</div></div>
+        <div style="text-align:right"><div class="price-val">₹2,550</div><div style="font-size:0.7rem;color:#2E7D32">↑ 1.8%</div></div>
+      </div>
+    </div>
+    <div class="card" onclick="goTo('prices')">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-weight:700">🌱 Soybean (Grade B)</div><div style="font-size:0.75rem;color:var(--muted)">Standard quality</div></div>
+        <div style="text-align:right"><div class="price-val">₹4,350</div><div style="font-size:0.7rem;color:#2E7D32">↑ 0.9%</div></div>
+      </div>
+    </div>
+    <div class="tip-box">
+      <strong>💡 आज का सुझाव</strong>
+      <p>गेहूं Grade A का भाव अच्छा है। पास के Verified खरीदार से सीधे बात करें और बेहतर रेट लें।</p>
+    </div>
+  </div>
+
+  <!-- PRICES -->
+  <div id="prices" class="page">
+    <div class="section-head"><h2>Live Local Prices</h2>
+      <button class="refresh-live" onclick="refreshLivePrices()">↻ Refresh live</button>
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px">Same crop → different rates by <strong>quality rating</strong> (Grade A / B / C)</p>
+
+    <!-- WHEAT -->
+    <div class="card crop-card" data-crop="wheat">
+      <div class="crop-header">
+        <div>
+          <div class="crop-title">🌾 Wheat (गेहूं)</div>
+          <div class="crop-sub">Updated today 9:30 AM • Raipur region</div>
+        </div>
+        <span class="live-dot">● Live</span>
+      </div>
+      <div class="crop-meta-row">
+        <span class="meta-chip">MSP ~ ₹2,425</span>
+        <span class="meta-chip">Arrival: Medium</span>
+        <span class="meta-chip trend-up">↑ 1.8% vs yesterday</span>
+      </div>
+      <table class="grade-table">
+        <thead><tr><th>Quality</th><th>Grade</th><th>Price / Quintal</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-a">★★★★★</span></td>
+            <td>A – Premium</td>
+            <td class="price-val">₹2,550</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-b">★★★★</span></td>
+            <td>B – Standard</td>
+            <td class="price-val">₹2,450</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-c">★★★</span></td>
+            <td>C – Average</td>
+            <td class="price-val">₹2,300</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="grade-note">
+        <strong>Grade A:</strong> Clean, good size, moisture &lt;12%<br>
+        <strong>Grade B:</strong> Normal quality, moisture 12–14%<br>
+        <strong>Grade C:</strong> Mixed / higher moisture
+      </div>
+      <div class="mandi-compare">
+        <h4>Nearby Mandi Comparison (Standard Grade B)</h4>
+        <div class="mandi-row"><span>Local Mandi (Raipur) <span class="dist">0 km</span></span><span style="font-weight:700">₹2,450</span></div>
+        <div class="mandi-row"><span>Rampur Mandi <span class="dist">12 km</span></span><span>₹2,420</span></div>
+        <div class="mandi-row"><span>Krishna Mandi <span class="dist">18 km</span></span><span>₹2,400</span></div>
+        <div class="mandi-row"><span>Shiv Mandi <span class="dist">25 km</span></span><span>₹2,380</span></div>
+      </div>
+      <div class="chart-box">
+        <h4>Price History (Grade B) – Last 7 Days</h4>
+        <div class="bar-chart">
+          <div class="bar-col"><div class="bar-val">2380</div><div class="bar" style="height:55%"></div><div class="bar-label">20</div></div>
+          <div class="bar-col"><div class="bar-val">2400</div><div class="bar" style="height:62%"></div><div class="bar-label">21</div></div>
+          <div class="bar-col"><div class="bar-val">2390</div><div class="bar" style="height:58%"></div><div class="bar-label">22</div></div>
+          <div class="bar-col"><div class="bar-val">2420</div><div class="bar" style="height:70%"></div><div class="bar-label">23</div></div>
+          <div class="bar-col"><div class="bar-val">2410</div><div class="bar" style="height:66%"></div><div class="bar-label">24</div></div>
+          <div class="bar-col"><div class="bar-val">2435</div><div class="bar" style="height:78%"></div><div class="bar-label">25</div></div>
+          <div class="bar-col"><div class="bar-val">2450</div><div class="bar today" style="height:85%"></div><div class="bar-label">Today</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOYBEAN -->
+    <div class="card crop-card" data-crop="soybean">
+      <div class="crop-header">
+        <div>
+          <div class="crop-title">🌱 Soybean (सोयाबीन)</div>
+          <div class="crop-sub">Updated today 9:15 AM • Raipur region</div>
+        </div>
+        <span class="live-dot">● Live</span>
+      </div>
+      <div class="crop-meta-row">
+        <span class="meta-chip">MSP ~ ₹5,328</span>
+        <span class="meta-chip">Arrival: Good</span>
+        <span class="meta-chip trend-up">↑ 0.9% vs yesterday</span>
+      </div>
+      <table class="grade-table">
+        <thead><tr><th>Quality</th><th>Grade</th><th>Price / Quintal</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-a">★★★★★</span></td>
+            <td>A – Premium</td>
+            <td class="price-val">₹4,480</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-b">★★★★</span></td>
+            <td>B – Standard</td>
+            <td class="price-val">₹4,350</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-c">★★★</span></td>
+            <td>C – Average</td>
+            <td class="price-val">₹4,180</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="grade-note">
+        <strong>Grade A:</strong> Bold seed, low damaged %, clean<br>
+        <strong>Grade B:</strong> Normal commercial quality<br>
+        <strong>Grade C:</strong> Higher damaged / mixed lot
+      </div>
+      <div class="mandi-compare">
+        <h4>Nearby Mandi Comparison (Standard Grade B)</h4>
+        <div class="mandi-row"><span>Local Mandi (Raipur) <span class="dist">0 km</span></span><span style="font-weight:700">₹4,350</span></div>
+        <div class="mandi-row"><span>Durg Mandi <span class="dist">35 km</span></span><span>₹4,280</span></div>
+        <div class="mandi-row"><span>Rajnandgaon <span class="dist">70 km</span></span><span>₹4,400</span></div>
+      </div>
+      <div class="chart-box">
+        <h4>Price History (Grade B) – Last 7 Days</h4>
+        <div class="bar-chart">
+          <div class="bar-col"><div class="bar-val">4280</div><div class="bar" style="height:60%"></div><div class="bar-label">20</div></div>
+          <div class="bar-col"><div class="bar-val">4300</div><div class="bar" style="height:65%"></div><div class="bar-label">21</div></div>
+          <div class="bar-col"><div class="bar-val">4290</div><div class="bar" style="height:62%"></div><div class="bar-label">22</div></div>
+          <div class="bar-col"><div class="bar-val">4320</div><div class="bar" style="height:72%"></div><div class="bar-label">23</div></div>
+          <div class="bar-col"><div class="bar-val">4310</div><div class="bar" style="height:68%"></div><div class="bar-label">24</div></div>
+          <div class="bar-col"><div class="bar-val">4335</div><div class="bar" style="height:78%"></div><div class="bar-label">25</div></div>
+          <div class="bar-col"><div class="bar-val">4350</div><div class="bar today" style="height:85%"></div><div class="bar-label">Today</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PADDY -->
+    <div class="card crop-card" data-crop="paddy">
+      <div class="crop-header">
+        <div>
+          <div class="crop-title">🍚 Paddy (धान)</div>
+          <div class="crop-sub">Updated today 8:50 AM • Raipur region</div>
+        </div>
+        <span class="live-dot">● Live</span>
+      </div>
+      <div class="crop-meta-row">
+        <span class="meta-chip">MSP ~ ₹2,300</span>
+        <span class="meta-chip">Arrival: High</span>
+        <span class="meta-chip trend-up">↑ 0.5% vs yesterday</span>
+      </div>
+      <table class="grade-table">
+        <thead><tr><th>Quality</th><th>Grade</th><th>Price / Quintal</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-a">★★★★★</span></td>
+            <td>A – Premium</td>
+            <td class="price-val">₹2,280</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-b">★★★★</span></td>
+            <td>B – Standard</td>
+            <td class="price-val">₹2,150</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-c">★★★</span></td>
+            <td>C – Average</td>
+            <td class="price-val">₹2,000</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="grade-note">
+        <strong>Grade A:</strong> Fine variety / low broken, good milling<br>
+        <strong>Grade B:</strong> Common paddy (MTU / Mahamaya type)<br>
+        <strong>Grade C:</strong> Coarse / higher moisture
+      </div>
+      <div class="mandi-compare">
+        <h4>Nearby Mandi Comparison (Standard Grade B)</h4>
+        <div class="mandi-row"><span>Local Mandi (Raipur) <span class="dist">0 km</span></span><span style="font-weight:700">₹2,150</span></div>
+        <div class="mandi-row"><span>Abhanpur <span class="dist">20 km</span></span><span>₹2,180</span></div>
+        <div class="mandi-row"><span>Dhamtari <span class="dist">75 km</span></span><span>₹2,200</span></div>
+      </div>
+      <div class="chart-box">
+        <h4>Price History (Grade B) – Last 7 Days</h4>
+        <div class="bar-chart">
+          <div class="bar-col"><div class="bar-val">2100</div><div class="bar" style="height:58%"></div><div class="bar-label">20</div></div>
+          <div class="bar-col"><div class="bar-val">2120</div><div class="bar" style="height:65%"></div><div class="bar-label">21</div></div>
+          <div class="bar-col"><div class="bar-val">2110</div><div class="bar" style="height:62%"></div><div class="bar-label">22</div></div>
+          <div class="bar-col"><div class="bar-val">2130</div><div class="bar" style="height:70%"></div><div class="bar-label">23</div></div>
+          <div class="bar-col"><div class="bar-val">2140</div><div class="bar" style="height:75%"></div><div class="bar-label">24</div></div>
+          <div class="bar-col"><div class="bar-val">2145</div><div class="bar" style="height:78%"></div><div class="bar-label">25</div></div>
+          <div class="bar-col"><div class="bar-val">2150</div><div class="bar today" style="height:82%"></div><div class="bar-label">Today</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIZE -->
+    <div class="card crop-card" data-crop="maize">
+      <div class="crop-header">
+        <div>
+          <div class="crop-title">🌽 Maize (मक्का)</div>
+          <div class="crop-sub">Updated today 9:00 AM • Raipur region</div>
+        </div>
+        <span class="live-dot">● Live</span>
+      </div>
+      <div class="crop-meta-row">
+        <span class="meta-chip">MSP ~ ₹2,225</span>
+        <span class="meta-chip">Arrival: Medium</span>
+        <span class="meta-chip trend-down">↓ 0.4% vs yesterday</span>
+      </div>
+      <table class="grade-table">
+        <thead><tr><th>Quality</th><th>Grade</th><th>Price / Quintal</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-a">★★★★★</span></td>
+            <td>A – Premium</td>
+            <td class="price-val">₹2,120</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-b">★★★★</span></td>
+            <td>B – Standard</td>
+            <td class="price-val">₹2,050</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-c">★★★</span></td>
+            <td>C – Average</td>
+            <td class="price-val">₹1,950</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="grade-note">
+        <strong>Grade A:</strong> Hybrid / bold grain, low moisture<br>
+        <strong>Grade B:</strong> Local / medium quality<br>
+        <strong>Grade C:</strong> Mixed / high moisture lot
+      </div>
+      <div class="mandi-compare">
+        <h4>Nearby Mandi Comparison (Standard Grade B)</h4>
+        <div class="mandi-row"><span>Local Mandi (Raipur) <span class="dist">0 km</span></span><span style="font-weight:700">₹2,050</span></div>
+        <div class="mandi-row"><span>Bilaspur <span class="dist">110 km</span></span><span>₹2,080</span></div>
+        <div class="mandi-row"><span>Kanker <span class="dist">140 km</span></span><span>₹2,000</span></div>
+      </div>
+      <div class="chart-box">
+        <h4>Price History (Grade B) – Last 7 Days</h4>
+        <div class="bar-chart">
+          <div class="bar-col"><div class="bar-val">2080</div><div class="bar" style="height:72%"></div><div class="bar-label">20</div></div>
+          <div class="bar-col"><div class="bar-val">2070</div><div class="bar" style="height:68%"></div><div class="bar-label">21</div></div>
+          <div class="bar-col"><div class="bar-val">2065</div><div class="bar" style="height:65%"></div><div class="bar-label">22</div></div>
+          <div class="bar-col"><div class="bar-val">2060</div><div class="bar" style="height:62%"></div><div class="bar-label">23</div></div>
+          <div class="bar-col"><div class="bar-val">2055</div><div class="bar" style="height:58%"></div><div class="bar-label">24</div></div>
+          <div class="bar-col"><div class="bar-val">2058</div><div class="bar" style="height:60%"></div><div class="bar-label">25</div></div>
+          <div class="bar-col"><div class="bar-val">2050</div><div class="bar today" style="height:55%"></div><div class="bar-label">Today</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <strong>📌 Quality Rating कैसे काम करता है?</strong>
+      <p>Grade A = साफ, अच्छा आकार, कम नमी → ऊँचा भाव<br>
+      Grade B = सामान्य गुणवत्ता → औसत भाव<br>
+      Grade C = औसत से कम / ज्यादा नमी → कम भाव<br><br>
+      Buyer के साथ deal करते समय quality grade साफ बताएं — इससे सही रेट मिलता है।</p>
+    </div>
+  </div>
+
+  <div id="buyers" class="page">
+    <div class="section-head"><h2>Verified Local Buyers</h2></div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px">Only KYC-verified millers & traders near you</p>
+
+    <div class="card">
+      <div class="buyer-row">
+        <div class="avatar">GH</div>
+        <div class="buyer-meta">
+          <div class="buyer-name">Green Harvest Traders <span class="badge badge-a" style="margin-left:4px">Verified</span></div>
+          <div class="stars">★★★★★ 4.6</div>
+          <div class="rel">Payment Reliability 92% • 1.2 km</div>
+          <div class="tags"><span class="tag">Wheat</span><span class="tag">Soybean</span><span class="tag">Gram</span></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="alert('Opening WhatsApp...')">📞 Call / WhatsApp</button>
+            <button class="btn btn-outline" onclick="openBuyer('Green Harvest Traders',4.6,92)">View Trust</button>
+            <button class="btn btn-primary btn-sm" onclick="startDeal('Green Harvest Traders','Wheat','B',2450)">Deal</button>
+            <button class="btn btn-outline btn-sm" onclick="openReview('Green Harvest Traders')">★ Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="buyer-row">
+        <div class="avatar">SJ</div>
+        <div class="buyer-meta">
+          <div class="buyer-name">Shree Ji Krishi Kendra <span class="badge badge-a" style="margin-left:4px">Verified</span></div>
+          <div class="stars">★★★★ 4.4</div>
+          <div class="rel">Payment Reliability 88% • 1.8 km</div>
+          <div class="tags"><span class="tag">Paddy</span><span class="tag">Maize</span><span class="tag">Cotton</span></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="alert('Opening WhatsApp...')">📞 Call / WhatsApp</button>
+            <button class="btn btn-outline" onclick="openBuyer('Shree Ji Krishi Kendra',4.4,88)">View Trust</button>
+            <button class="btn btn-primary btn-sm" onclick="startDeal('Shree Ji Krishi Kendra','Paddy','B',2150)">Deal</button>
+            <button class="btn btn-outline btn-sm" onclick="openReview('Shree Ji Krishi Kendra')">★ Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="buyer-row">
+        <div class="avatar">KT</div>
+        <div class="buyer-meta">
+          <div class="buyer-name">Kisan Trading Company <span class="badge badge-a" style="margin-left:4px">Verified</span></div>
+          <div class="stars">★★★★ 4.2</div>
+          <div class="rel">Payment Reliability 88% • 2.3 km</div>
+          <div class="tags"><span class="tag">Wheat</span><span class="tag">Mustard</span><span class="tag">Lentil</span></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="alert('Opening WhatsApp...')">📞 Call / WhatsApp</button>
+            <button class="btn btn-outline" onclick="openBuyer('Kisan Trading Company',4.2,88)">View Trust</button>
+            <button class="btn btn-primary btn-sm" onclick="startDeal('Kisan Trading Company','Wheat','A',2550)">Deal</button>
+            <button class="btn btn-outline btn-sm" onclick="openReview('Kisan Trading Company')">★ Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="buyer-row">
+        <div class="avatar">JB</div>
+        <div class="buyer-meta">
+          <div class="buyer-name">Jai Bhavani Mandi Store <span class="badge badge-a" style="margin-left:4px">Verified</span></div>
+          <div class="stars">★★★★ 4.0</div>
+          <div class="rel">Payment Reliability 80% • 2.7 km</div>
+          <div class="tags"><span class="tag">Soybean</span><span class="tag">Gram</span><span class="tag">Urad</span></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="alert('Opening WhatsApp...')">📞 Call / WhatsApp</button>
+            <button class="btn btn-outline" onclick="openBuyer('Jai Bhavani Mandi Store',4.0,80)">View Trust</button>
+            <button class="btn btn-primary btn-sm" onclick="startDeal('Jai Bhavani Mandi Store','Soybean','B',4350)">Deal</button>
+            <button class="btn btn-outline btn-sm" onclick="openReview('Jai Bhavani Mandi Store')">★ Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMAND -->
+  <div id="demand" class="page">
+    <div class="section-head"><h2>Demand Forecast</h2></div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px">Next 3–6 months outlook</p>
+    <div class="card">
+      <div class="demand-row"><div><div class="demand-crop">🌾 Wheat</div><div class="demand-period">Nov 2026 – Jan 2027</div></div><div class="status-shortage">⚠ Possible Shortage</div></div>
+      <div class="demand-row"><div><div class="demand-crop">🌱 Soybean</div><div class="demand-period">Oct – Dec 2026</div></div><div class="status-stable">● Stable Demand</div></div>
+      <div class="demand-row"><div><div class="demand-crop">🍚 Paddy</div><div class="demand-period">Dec 2026 – Feb 2027</div></div><div class="status-high">▲ High Demand</div></div>
+      <div class="demand-row"><div><div class="demand-crop">🌽 Maize</div><div class="demand-period">Jan – Mar 2027</div></div><div class="status-stable">● Moderate</div></div>
+      <div class="demand-row"><div><div class="demand-crop">🫘 Gram (Chana)</div><div class="demand-period">Feb – Apr 2027</div></div><div class="status-shortage">⚠ Shortage Risk</div></div>
+    </div>
+    <div class="tip-box">
+      <strong>💡 किसान के लिए सुझाव</strong>
+      <p>गेहूं में Nov–Jan में कमी की संभावना है। Grade A गुणवत्ता का स्टॉक रखकर बाद में बेहतर भाव मिल सकता है।</p>
+    </div>
+  </div>
+
+  <!-- SUPPORT -->
+  <div id="support" class="page">
+    <div class="section-head"><h2>Complaint & Support</h2></div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px">Unpaid amount or unfair deal? Register here</p>
+    <div class="card card-lg">
+      <div class="form-group"><label>Select Buyer</label>
+        <select id="cBuyer"><option value="">Choose buyer...</option><option>Green Harvest Traders</option><option>Shree Ji Krishi Kendra</option><option>Kisan Trading Company</option><option>Jai Bhavani Mandi Store</option></select>
+      </div>
+      <div class="form-group"><label>Issue Type</label>
+        <select id="cType"><option value="">Select issue...</option><option>Unpaid / Delayed Payment</option><option>Wrong Rate Given</option><option>Quality Dispute</option><option>Other</option></select>
+      </div>
+      <div class="form-group"><label>Amount Involved (₹)</label><input type="number" id="cAmount" placeholder="e.g. 45000" /></div>
+      <div class="form-group"><label>Brief Description</label><textarea id="cDesc" rows="3" placeholder="Describe the issue..."></textarea></div>
+      <button class="btn btn-primary btn-block" onclick="submitComplaint()">Submit Complaint</button>
+      <div class="success-box" id="cSuccess">✅ Complaint registered successfully.<br>Our support team will contact you within 24–48 hours.</div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <div style="font-weight:700;margin-bottom:6px;font-size:0.9rem">Your Tickets</div>
+      <div style="font-size:0.82rem;color:var(--muted)">No open tickets right now.</div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+
+  <!-- SUBSIDY -->
+  <div id="subsidy" class="page">
+    <div class="section-head"><h2>Government Subsidies</h2></div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px">
+      Central & Chhattisgarh schemes useful for farmers
+    </p>
+
+    <div class="subsidy-card">
+      <h3>🌾 PM-KISAN</h3>
+      <div class="sub-dept">Ministry of Agriculture • Central</div>
+      <div class="sub-amount">₹6,000 / year</div>
+      <p>Income support of ₹6,000 per year in 3 installments of ₹2,000 to eligible landholding farmer families.</p>
+      <div class="sub-tags"><span class="sub-tag">Direct Benefit</span><span class="sub-tag">All Farmers</span></div>
+    </div>
+
+    <div class="subsidy-card">
+      <h3>🚜 Farm Mechanisation Subsidy</h3>
+      <div class="sub-dept">Chhattisgarh Agriculture Dept</div>
+      <div class="sub-amount">40% – 50% subsidy</div>
+      <p>Subsidy on tractors, power tillers, threshers and other farm equipment for small & marginal farmers.</p>
+      <div class="sub-tags"><span class="sub-tag">Equipment</span><span class="sub-tag">State Scheme</span></div>
+    </div>
+
+    <div class="subsidy-card">
+      <h3>💧 Micro Irrigation (PMKSY)</h3>
+      <div class="sub-dept">Central + State</div>
+      <div class="sub-amount">Up to 55% subsidy</div>
+      <p>Subsidy for drip and sprinkler irrigation systems to save water and improve yield.</p>
+      <div class="sub-tags"><span class="sub-tag">Irrigation</span><span class="sub-tag">Water Saving</span></div>
+    </div>
+
+    <div class="subsidy-card">
+      <h3>🌱 Seed & Input Subsidy</h3>
+      <div class="sub-dept">Chhattisgarh State</div>
+      <div class="sub-amount">As per crop calendar</div>
+      <p>Subsidised seeds, fertilisers and plant protection chemicals distributed through cooperative societies and Krishi Vigyan Kendras.</p>
+      <div class="sub-tags"><span class="sub-tag">Inputs</span><span class="sub-tag">Seasonal</span></div>
+    </div>
+
+    <div class="subsidy-card">
+      <h3>📦 e-NAM / Mandi Linked Support</h3>
+      <div class="sub-dept">Central (Agri Marketing)</div>
+      <div class="sub-amount">Better price discovery</div>
+      <p>Online trading on e-NAM helps farmers get transparent prices. Local Mandi works alongside local buyers for hyper-local deals.</p>
+      <div class="sub-tags"><span class="sub-tag">Marketing</span><span class="sub-tag">Digital</span></div>
+    </div>
+
+    <div class="subsidy-card">
+      <h3>🏦 Kisan Credit Card (KCC)</h3>
+      <div class="sub-dept">Banks + Government</div>
+      <div class="sub-amount">Low interest credit</div>
+      <p>Easy crop loan with interest subvention. Helps farmers manage working capital for sowing and selling season.</p>
+      <div class="sub-tags"><span class="sub-tag">Credit</span><span class="sub-tag">Interest Support</span></div>
+    </div>
+
+    <div class="tip-box">
+      <strong>📌 कैसे लाभ लें?</strong>
+      <p>नजदीकी कृषि विभाग कार्यालय, को-ऑपरेटिव सोसाइटी या CSC सेंटर पर जाकर स्कीम के लिए आवेदन करें। आधार और जमीन के दस्तावेज साथ रखें।</p>
+    </div>
+  </div>
+
+  <div id="about" class="page">
+    <div class="section-head"><h2>About Local Mandi</h2></div>
+    <div class="card card-lg">
+      <p style="font-size:0.9rem;line-height:1.5;margin-bottom:12px"><strong>Local Mandi</strong> is a trusted <strong>B2B platform</strong> that connects Farmers directly with verified local Mandi buyers (millers, traders, processors).</p>
+      <p style="font-size:0.85rem;color:var(--muted);line-height:1.45">We help farmers get fair local prices, discover reliable nearby buyers with ratings & payment history, and reduce middlemen dependency.</p>
+    </div>
+    <div class="section-head" style="margin-top:8px"><h2>How it works</h2></div>
+    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Select crop & location</h4><p>Farmer chooses the crop and sees live local prices by quality grade.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>See verified buyers</h4><p>List of nearby KYC-verified buyers with ratings, payment reliability and distance.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Deal with trust</h4><p>Contact buyer, sell at fair price. If any issue — use complaint & unpaid support.</p></div></div>
+    <div class="section-head" style="margin-top:8px"><h2>Key Features</h2></div>
+    <div class="card">
+      <ul class="feature-list">
+        <li>💰 Live local prices with quality-grade rates (A / B / C)</li>
+        <li>✅ Verified Mandi buyers with KYC & ratings</li>
+        <li>📊 Payment history & reliability score</li>
+        <li>📈 3–6 month demand forecast</li>
+        <li>🛡️ Complaint & unpaid amount support</li>
+        <li>🗣️ Simple Hindi + local language interface</li>
+      </ul>
+    </div>
+    <div class="card" style="background:var(--green);color:white;border:none">
+      <div style="font-weight:700;margin-bottom:4px">Team Agronexus</div>
+      <div style="font-size:0.85rem;opacity:0.9">Tanish Sen • Individual Innovator</div>
+      <div style="font-size:0.8rem;opacity:0.8;margin-top:6px">tanish.sencse24@ssipmt.com • 9755181415</div>
+    </div>
+  </div>
+
+
+  <!-- APP MENU (3-dot) -->
+  <div class="menu-overlay" id="menuOverlay" onclick="closeMenu(event)">
+    <div class="app-menu" onclick="event.stopPropagation()">
+      <button class="menu-item" onclick="openProfile()">
+        <span class="mi-icon">👤</span> <span data-i18n="menu_profile">My Profile</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="openLanguage()">
+        <span class="mi-icon">🌐</span> <span data-i18n="menu_language">Language</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="goTo('subsidy');closeMenuAll()">
+        <span class="mi-icon">🏛️</span> <span data-i18n="menu_subsidy">Govt Subsidy</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="goTo('about');closeMenuAll()">
+        <span class="mi-icon">ℹ️</span> <span data-i18n="menu_about">About App</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="alert(t('help_msg'))">
+        <span class="mi-icon">💬</span> <span data-i18n="menu_help">Help & Support</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="alert(t('share_msg'))">
+        <span class="mi-icon">📤</span> <span data-i18n="menu_share">Share App</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="toggleDark();closeMenuAll()">
+        <span class="mi-icon">🌙</span> <span id="darkLabel">Dark Mode</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="openSell();closeMenuAll()">
+        <span class="mi-icon">📦</span> <span>Sell My Crop</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="openMap();closeMenuAll()">
+        <span class="mi-icon">🗺️</span> <span>Map – Nearby Buyers</span>
+        <span class="mi-arrow">›</span>
+      </button>
+      <button class="menu-item" onclick="logout()">
+        <span class="mi-icon">🚪</span> <span>Logout</span>
+        <span class="mi-arrow">›</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- LANGUAGE SHEET -->
+  <div class="overlay" id="langSheet">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3 data-i18n="lang_title">Select Language</h3>
+        <button class="close-x" onclick="closeLang()">×</button>
+      </div>
+      <button class="lang-option" data-lang="en" onclick="setLang('en')">
+        <span>🇬🇧</span> English <span class="check" id="chk-en"></span>
+      </button>
+      <button class="lang-option" data-lang="hi" onclick="setLang('hi')">
+        <span>🇮🇳</span> हिन्दी (Hindi) <span class="check" id="chk-hi"></span>
+      </button>
+      <button class="lang-option" data-lang="cg" onclick="setLang('cg')">
+        <span>🌾</span> छत्तीसगढ़ी (Chhattisgarhi) <span class="check" id="chk-cg"></span>
+      </button>
+      <p style="font-size:0.75rem;color:var(--muted);padding:12px 16px 4px;line-height:1.4" data-i18n="lang_note">
+        Choosing Chhattisgarhi will change the full app interface.
+      </p>
+    </div>
+  </div>
+
+  <!-- PROFILE SHEET -->
+  <div class="overlay" id="profileSheet">
+    <div class="sheet profile-sheet" style="max-height:92vh">
+      <div class="sheet-head">
+        <h3>My Profile</h3>
+        <button class="close-x" onclick="closeProfile()">×</button>
+      </div>
+
+      <div class="profile-hero">
+        <div class="profile-hero-top">
+          <div class="profile-avatar">TS</div>
+          <div>
+            <h3>Tanish Sen</h3>
+            <div class="role">Farmer · Seller · Raipur, CG</div>
+            <div class="kyc-pill">✓ KYC Verified</div>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="ps-val">4.6</div>
+            <div class="ps-lbl">Your Rating</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-val">128</div>
+            <div class="ps-lbl">Deals Done</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-val">94%</div>
+            <div class="ps-lbl">On-time</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-weight:700;font-size:0.9rem;margin-bottom:10px;color:var(--green)">Trust Overview</div>
+      <div class="trust-grid-3">
+        <div class="trust-cell">
+          <div class="tc-icon">🛡️</div>
+          <div class="tc-val">Verified</div>
+          <div class="tc-lbl">KYC Status</div>
+        </div>
+        <div class="trust-cell">
+          <div class="tc-icon">📊</div>
+          <div class="tc-val">94%</div>
+          <div class="tc-lbl">Payment History</div>
+        </div>
+        <div class="trust-cell">
+          <div class="tc-icon">⭐</div>
+          <div class="tc-val">4.6</div>
+          <div class="tc-lbl">Reliability</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:4px 16px">
+        <div class="info-row"><span class="il">Phone</span><span class="iv">9755181415</span></div>
+        <div class="info-row"><span class="il">Email</span><span class="iv" style="font-size:0.72rem">tanish.sencse24@ssipmt.com</span></div>
+        <div class="info-row"><span class="il">Role</span><span class="iv">Seller (Farmer)</span></div>
+        <div class="info-row"><span class="il">Member since</span><span class="iv">Oct 2026</span></div>
+        <div class="info-row"><span class="il">Preferred crops</span><span class="iv">Wheat, Soybean</span></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px">
+        <div style="font-weight:700;font-size:0.9rem;color:var(--green)">Recent Feedback</div>
+        <span style="font-size:0.75rem;color:var(--muted)">From buyers</span>
+      </div>
+      <div class="card">
+        <div class="review-row">
+          <div class="review-av">GH</div>
+          <div class="review-body">
+            <div class="rb-name">Green Harvest Traders</div>
+            <div class="review-stars">★★★★★ 5.0</div>
+            <div class="rb-text">Quality grain, on-time delivery. Reliable farmer.</div>
+            <div class="rb-meta">2 weeks ago</div>
+          </div>
+        </div>
+        <div class="review-row">
+          <div class="review-av">KT</div>
+          <div class="review-body">
+            <div class="rb-name">Kisan Trading Co.</div>
+            <div class="review-stars">★★★★☆ 4.5</div>
+            <div class="rb-text">Fair dealing and clear communication.</div>
+            <div class="rb-meta">1 month ago</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="btn btn-outline" onclick="alert('Edit profile coming in next version')">Edit Profile</button>
+        <button class="btn btn-primary" onclick="closeProfile()">Done</button>
+      </div>
+    </div>
+  </div>
+  <!-- NOTIFICATIONS -->
+  <div class="overlay" id="notifSheet">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3>Notifications</h3>
+        <button class="close-x" onclick="closeNotifs()">×</button>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon">📈</div>
+        <div class="notif-body">
+          <h4>Wheat price up 1.8%</h4>
+          <p>Grade A now ₹2,550 / quintal in Raipur</p>
+          <div class="notif-time">Today 9:30 AM</div>
+        </div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon">💰</div>
+        <div class="notif-body">
+          <h4>Payment reminder</h4>
+          <p>Green Harvest Traders — deal pending confirmation</p>
+          <div class="notif-time">Yesterday</div>
+        </div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon">🏛️</div>
+        <div class="notif-body">
+          <h4>PM-KISAN installment</h4>
+          <p>Next installment window opening soon</p>
+          <div class="notif-time">2 days ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELL CROP -->
+  <div class="overlay" id="sellSheet">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3>Sell My Crop</h3>
+        <button class="close-x" onclick="closeSell()">×</button>
+      </div>
+      <div class="form-group">
+        <label>Crop</label>
+        <select id="sellCrop">
+          <option value="Wheat">Wheat (गेहूं)</option>
+          <option value="Soybean">Soybean (सोयाबीन)</option>
+          <option value="Paddy">Paddy (धान)</option>
+          <option value="Maize">Maize (मक्का)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Quality Grade</label>
+        <div class="grade-select">
+          <label><input type="radio" name="sellGrade" value="A" checked /> A Premium</label>
+          <label><input type="radio" name="sellGrade" value="B" /> B Standard</label>
+          <label><input type="radio" name="sellGrade" value="C" /> C Average</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Quantity (Quintal)</label>
+        <input type="number" id="sellQty" placeholder="e.g. 25" />
+      </div>
+      <div class="form-group">
+        <label>Expected Rate (₹ / Quintal)</label>
+        <input type="number" id="sellRate" placeholder="e.g. 2450" />
+      </div>
+      <button class="btn btn-primary btn-block" onclick="postCrop()">Post for Sale</button>
+    </div>
+  </div>
+
+  <!-- DEAL FLOW -->
+  <div class="overlay" id="dealSheet">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3>Confirm Deal</h3>
+        <button class="close-x" onclick="closeDeal()">×</button>
+      </div>
+      <div class="deal-steps">
+        <div class="deal-step on" id="ds1">1. Rate</div>
+        <div class="deal-step" id="ds2">2. Accept</div>
+        <div class="deal-step" id="ds3">3. Confirm</div>
+      </div>
+      <div id="dealStep1">
+        <div class="card">
+          <div style="font-weight:700" id="dealBuyerName">Buyer</div>
+          <div style="font-size:0.85rem;color:var(--muted);margin-top:4px" id="dealCropLine">Crop • Grade</div>
+          <div style="font-size:1.3rem;font-weight:800;color:var(--orange);margin-top:10px" id="dealRateShow">₹0</div>
+          <div style="font-size:0.8rem;color:var(--muted)">per quintal</div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="dealAccept()">Accept Rate</button>
+      </div>
+      <div id="dealStep2" style="display:none">
+        <div class="form-group">
+          <label>Quantity (Quintal)</label>
+          <input type="number" id="dealQty" placeholder="e.g. 10" />
+        </div>
+        <button class="btn btn-primary btn-block" onclick="dealConfirm()">Confirm Deal</button>
+      </div>
+      <div id="dealStep3" style="display:none;text-align:center;padding:20px 0">
+        <div style="font-size:3rem">✅</div>
+        <h3 style="color:var(--green);margin:10px 0">Deal Confirmed</h3>
+        <p style="color:var(--muted);font-size:0.9rem" id="dealSummary"></p>
+        <button class="btn btn-primary btn-block" style="margin-top:16px" onclick="closeDeal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WRITE REVIEW -->
+  <div class="overlay" id="reviewSheet">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3>Rate Buyer</h3>
+        <button class="close-x" onclick="closeReview()">×</button>
+      </div>
+      <p style="font-size:0.85rem;margin-bottom:12px" id="reviewBuyerLabel">Buyer</p>
+      <div class="form-group">
+        <label>Your Rating</label>
+        <div style="font-size:1.8rem;letter-spacing:4px;cursor:pointer" id="starPick" onclick="pickStar(event)">☆☆☆☆☆</div>
+        <input type="hidden" id="reviewStars" value="0" />
+      </div>
+      <div class="form-group">
+        <label>Review</label>
+        <textarea id="reviewText" rows="3" placeholder="Payment on time? Fair rate?"></textarea>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="submitReview()">Submit Review</button>
+    </div>
+  </div>
+
+  <!-- MAP VIEW -->
+  <div class="overlay" id="mapSheet">
+    <div class="sheet" style="max-height:92vh">
+      <div class="sheet-head">
+        <h3>Nearby Buyers Map</h3>
+        <button class="close-x" onclick="closeMap()">×</button>
+      </div>
+      <div class="map-wrap">
+        <iframe title="Raipur map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://maps.google.com/maps?q=Raipur+Chhattisgarh+mandi&z=12&output=embed"></iframe>
+      </div>
+      <div class="map-pin-list">
+        <div class="card" style="padding:10px">
+          <strong>Green Harvest Traders</strong> · 1.2 km
+          <div style="font-size:0.75rem;color:var(--muted)">★★★★★ 4.6 · Payment 92%</div>
+        </div>
+        <div class="card" style="padding:10px">
+          <strong>Shree Ji Krishi Kendra</strong> · 1.8 km
+          <div style="font-size:0.75rem;color:var(--muted)">★★★★ 4.4 · Payment 88%</div>
+        </div>
+        <div class="card" style="padding:10px">
+          <strong>Kisan Trading Company</strong> · 2.3 km
+          <div style="font-size:0.75rem;color:var(--muted)">★★★★ 4.2 · Payment 88%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="fab" onclick="openSell()" title="Sell crop">+</button>
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="home"><span class="n-icon">🏠</span>Home</button>
+    <button class="nav-btn" data-page="prices"><span class="n-icon">💰</span>Prices</button>
+    <button class="nav-btn" data-page="buyers"><span class="n-icon">🏪</span>Buyers</button>
+    <button class="nav-btn" data-page="demand"><span class="n-icon">📈</span>Demand</button>
+    <button class="nav-btn" data-page="subsidy"><span class="n-icon">🏛️</span>Subsidy</button>
+    <button class="nav-btn" data-page="support"><span class="n-icon">🛡️</span>Support</button>
+  </nav>
+
+  <div class="overlay" id="buyerSheet">
+    <div class="sheet" style="max-height:92vh">
+      <div class="sheet-head">
+        <h3 id="sheetName">Buyer Profile + Trust</h3>
+        <button class="close-x" onclick="closeSheet()">×</button>
+      </div>
+      <div class="profile-hero">
+        <div class="profile-hero-top">
+          <div class="profile-avatar" id="sheetAvatar">GH</div>
+          <div>
+            <h3 id="sheetName2">Buyer</h3>
+            <div class="role">Agri Buyer · Local Mandi, Raipur</div>
+            <div class="kyc-pill">✓ KYC Verified</div>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="ps-val" id="sheetStarsNum">4.6</div>
+            <div class="ps-lbl">Rating / 5.0</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-val" id="sheetPay2">92%</div>
+            <div class="ps-lbl">Paid on time</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-val">High</div>
+            <div class="ps-lbl">Reliability</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-weight:700;font-size:0.9rem;margin-bottom:10px;color:var(--green)">Trust Overview</div>
+      <div class="trust-grid-3">
+        <div class="trust-cell">
+          <div class="tc-icon">🛡️</div>
+          <div class="tc-val">Verified</div>
+          <div class="tc-lbl">KYC & Documents</div>
+        </div>
+        <div class="trust-cell">
+          <div class="tc-icon">📊</div>
+          <div class="tc-val" id="sheetPay3">92%</div>
+          <div class="tc-lbl">Payment History</div>
+        </div>
+        <div class="trust-cell">
+          <div class="tc-icon">⭐</div>
+          <div class="tc-val" id="sheetStarsNum2">4.6</div>
+          <div class="tc-lbl">High Trust</div>
+        </div>
+      </div>
+      <div style="font-weight:700;font-size:0.9rem;margin-bottom:8px;color:var(--green)">Reviews from Farmers</div>
+      <div class="card">
+        <div class="review-row">
+          <div class="review-av">SY</div>
+          <div class="review-body">
+            <div class="rb-name">Suresh Yadav <span class="review-stars">★★★★★</span></div>
+            <div class="rb-text">Always paid on time and communicates clearly. Very reliable buyer.</div>
+            <div class="rb-meta">2 weeks ago · Verified farmer</div>
+          </div>
+        </div>
+        <div class="review-row">
+          <div class="review-av">RP</div>
+          <div class="review-body">
+            <div class="rb-name">Ramesh Patel <span class="review-stars">★★★★☆</span></div>
+            <div class="rb-text">Fair pricing and transparent dealings. Happy to work again.</div>
+            <div class="rb-meta">1 month ago · Verified farmer</div>
+          </div>
+        </div>
+        <div class="review-row">
+          <div class="review-av">MD</div>
+          <div class="review-body">
+            <div class="rb-name">Meera Devi <span class="review-stars">★★★★★</span></div>
+            <div class="rb-text">Smooth transactions. Trusted and respectful buyer.</div>
+            <div class="rb-meta">1 month ago · Verified farmer</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box" style="margin-bottom:12px">
+        <strong>Have an issue with this buyer?</strong>
+        <p>File a complaint and we will help resolve it.</p>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="alert('Connecting...')">Contact Buyer</button>
+      <button class="btn btn-outline btn-block" style="margin-top:8px" onclick="goTo('support');closeSheet()">File Complaint</button>
+      <button class="btn btn-outline btn-block" style="margin-top:8px" onclick="openReview(document.getElementById('sheetName2').textContent);closeSheet()">Write Review</button>
+    </div>
+  </div>
+
+  <script>
+    // ========== i18n ==========
+    const translations = {
+      en: {
+        location: "📍 Raipur, CG",
+        menu_profile: "My Profile",
+        menu_language: "Language",
+        menu_subsidy: "Govt Subsidy",
+        menu_about: "About App",
+        menu_help: "Help & Support",
+        menu_share: "Share App",
+        lang_title: "Select Language",
+        lang_note: "Choosing Chhattisgarhi will change the full app interface.",
+        profile_title: "My Profile",
+        profile_phone: "Phone",
+        profile_email: "Email",
+        profile_role: "Role",
+        profile_role_val: "Seller (Farmer)",
+        profile_edit: "Edit Profile",
+        profile_done: "Done",
+        nav_home: "Home",
+        nav_prices: "Prices",
+        nav_buyers: "Buyers",
+        nav_demand: "Demand",
+        nav_subsidy: "Subsidy",
+        nav_support: "Support",
+        greet: "Namaste, Farmer 🙏",
+        greet_sub: "Today's local mandi rates & trusted buyers",
+        live_prices: "Live Prices",
+        live_prices_sub: "Grade-wise rates",
+        local_buyers: "Local Buyers",
+        local_buyers_sub: "Verified & rated",
+        demand_out: "Demand Outlook",
+        demand_out_sub: "3–6 month forecast",
+        support_q: "Support",
+        support_q_sub: "Unpaid / complaint",
+        subsidy_q: "Subsidy",
+        subsidy_q_sub: "Govt schemes",
+        top_prices: "Today's Top Prices",
+        see_all: "See all →",
+        tip_today: "💡 Today's Tip",
+        tip_today_body: "Wheat Grade A rate is good. Talk directly to nearby Verified buyers for a better deal.",
+        prices_title: "Live Local Prices",
+        prices_sub: "Same crop → different rates by quality rating (Grade A / B / C)",
+        buyers_title: "Verified Local Buyers",
+        buyers_sub: "Only KYC-verified millers & traders near you",
+        demand_title: "Demand Forecast",
+        demand_sub: "Next 3–6 months outlook",
+        support_title: "Complaint & Support",
+        support_sub: "Unpaid amount or unfair deal? Register here",
+        subsidy_title: "Government Subsidies",
+        subsidy_sub: "Central & Chhattisgarh schemes useful for farmers",
+        about_title: "About Local Mandi",
+        help_msg: "For help call: 9755181415 or email tanish.sencse24@ssipmt.com",
+        share_msg: "Share Local Mandi with fellow farmers — Fair Price, Trusted Deals!",
+        edit_soon: "Edit profile coming soon in next version."
+      },
+      hi: {
+        location: "📍 रायपुर, छ.ग.",
+        menu_profile: "मेरा प्रोफ़ाइल",
+        menu_language: "भाषा",
+        menu_subsidy: "सरकारी सब्सिडी",
+        menu_about: "ऐप के बारे में",
+        menu_help: "सहायता",
+        menu_share: "ऐप शेयर करें",
+        lang_title: "भाषा चुनें",
+        lang_note: "छत्तीसगढ़ी चुनने पर पूरा ऐप इंटरफ़ेस बदल जाएगा।",
+        profile_title: "मेरा प्रोफ़ाइल",
+        profile_phone: "फ़ोन",
+        profile_email: "ईमेल",
+        profile_role: "भूमिका",
+        profile_role_val: "विक्रेता (किसान)",
+        profile_edit: "प्रोफ़ाइल संपादित करें",
+        profile_done: "हो गया",
+        nav_home: "होम",
+        nav_prices: "भाव",
+        nav_buyers: "खरीदार",
+        nav_demand: "मांग",
+        nav_subsidy: "सब्सिडी",
+        nav_support: "सहायता",
+        greet: "नमस्ते, किसान भाई 🙏",
+        greet_sub: "आज का स्थानीय मंडी भाव और भरोसेमंद खरीदार",
+        live_prices: "लाइव भाव",
+        live_prices_sub: "ग्रेड के अनुसार रेट",
+        local_buyers: "स्थानीय खरीदार",
+        local_buyers_sub: "वेरिफ़ाइड और रेटेड",
+        demand_out: "मांग का अनुमान",
+        demand_out_sub: "3–6 महीने का पूर्वानुमान",
+        support_q: "सहायता",
+        support_q_sub: "बकाया / शिकायत",
+        subsidy_q: "सब्सिडी",
+        subsidy_q_sub: "सरकारी योजनाएँ",
+        top_prices: "आज के मुख्य भाव",
+        see_all: "सभी देखें →",
+        tip_today: "💡 आज का सुझाव",
+        tip_today_body: "गेहूं Grade A का भाव अच्छा है। पास के Verified खरीदार से सीधे बात करें।",
+        prices_title: "लाइव स्थानीय भाव",
+        prices_sub: "एक फसल → गुणवत्ता ग्रेड के अनुसार अलग रेट (A / B / C)",
+        buyers_title: "वेरिफ़ाइड स्थानीय खरीदार",
+        buyers_sub: "केवल KYC वेरिफ़ाइड मिलर और व्यापारी",
+        demand_title: "मांग पूर्वानुमान",
+        demand_sub: "अगले 3–6 महीने का दृष्टिकोण",
+        support_title: "शिकायत और सहायता",
+        support_sub: "बकाया राशि या अन्याय? यहाँ दर्ज करें",
+        subsidy_title: "सरकारी सब्सिडी",
+        subsidy_sub: "केंद्र और छत्तीसगढ़ की किसान योजनाएँ",
+        about_title: "लोकल मंडी के बारे में",
+        help_msg: "सहायता के लिए कॉल करें: 9755181415",
+        share_msg: "लोकल मंडी को अन्य किसानों के साथ शेयर करें!",
+        edit_soon: "प्रोफ़ाइल संपादन अगले वर्जन में आएगा।"
+      },
+      cg: {
+        location: "📍 रायपुर, छत्तीसगढ़",
+        menu_profile: "मोर प्रोफ़ाइल",
+        menu_language: "भाखा",
+        menu_subsidy: "सरकारी सब्सिडी",
+        menu_about: "ऐप के बारे मं",
+        menu_help: "मदद",
+        menu_share: "ऐप बाँटो",
+        lang_title: "भाखा चुनव",
+        lang_note: "छत्तीसगढ़ी चुनले पर पूरा ऐप छत्तीसगढ़ी मं बदल जाही।",
+        profile_title: "मोर प्रोफ़ाइल",
+        profile_phone: "फोन",
+        profile_email: "ईमेल",
+        profile_role: "भूमिका",
+        profile_role_val: "बेचइया (किसान)",
+        profile_edit: "प्रोफ़ाइल सुधारव",
+        profile_done: "ठीक हे",
+        nav_home: "होम",
+        nav_prices: "भाव",
+        nav_buyers: "खरीदार",
+        nav_demand: "मांग",
+        nav_subsidy: "सब्सिडी",
+        nav_support: "मदद",
+        greet: "जोहार, किसान भाई 🙏",
+        greet_sub: "आज के लोकल मंडी भाव अउ भरोसेमंद खरीदार",
+        live_prices: "लाइव भाव",
+        live_prices_sub: "ग्रेड अनुसार रेट",
+        local_buyers: "लोकल खरीदार",
+        local_buyers_sub: "वेरिफ़ाइड अउ रेटेड",
+        demand_out: "मांग के अनुमान",
+        demand_out_sub: "3–6 महिना के अंदाज",
+        support_q: "मदद",
+        support_q_sub: "बकाया / शिकायत",
+        subsidy_q: "सब्सिडी",
+        subsidy_q_sub: "सरकारी योजना",
+        top_prices: "आज के मुख्य भाव",
+        see_all: "सब्बो देखव →",
+        tip_today: "💡 आज के सुझाव",
+        tip_today_body: "गेहूँ Grade A के भाव बढ़िया हे। पास के Verified खरीदार ले सीधा बात करव।",
+        prices_title: "लाइव लोकल भाव",
+        prices_sub: "एक फसल → गुणवत्ता ग्रेड अनुसार अलग रेट (A / B / C)",
+        buyers_title: "वेरिफ़ाइड लोकल खरीदार",
+        buyers_sub: "सिर्फ KYC वेरिफ़ाइड मिलर अउ व्यापारी",
+        demand_title: "मांग के पूर्वानुमान",
+        demand_sub: "अगला 3–6 महिना के नज़र",
+        support_title: "शिकायत अउ मदद",
+        support_sub: "बकाया पइसा या अन्याय? इहाँ दर्ज करव",
+        subsidy_title: "सरकारी सब्सिडी",
+        subsidy_sub: "केंद्र अउ छत्तीसगढ़ के किसान योजना",
+        about_title: "लोकल मंडी के बारे मं",
+        help_msg: "मदद बर फोन करव: 9755181415",
+        share_msg: "लोकल मंडी ला अउ किसान मन संग बाँटो!",
+        edit_soon: "प्रोफ़ाइल सुधार अगला वर्जन मं आही।"
+      }
+    };
+
+    let currentLang = localStorage.getItem('lm_lang') || 'hi';
+
+    function t(key) {
+      return (translations[currentLang] && translations[currentLang][key]) || translations.en[key] || key;
+    }
+
+    function applyLang() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) el.textContent = translations[currentLang][key];
+      });
+      // Nav labels
+      const navMap = { home: 'nav_home', prices: 'nav_prices', buyers: 'nav_buyers', demand: 'nav_demand', subsidy: 'nav_subsidy', support: 'nav_support' };
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        const page = btn.dataset.page;
+        if (navMap[page]) {
+          const icon = btn.querySelector('.n-icon');
+          const iconHtml = icon ? icon.outerHTML : '';
+          btn.innerHTML = iconHtml + t(navMap[page]);
+        }
+      });
+      // Greeting
+      const g = document.querySelector('#home .greeting h2');
+      const gs = document.querySelector('#home .greeting p');
+      if (g) g.textContent = t('greet');
+      if (gs) gs.textContent = t('greet_sub');
+      // Quick cards
+      const qc = document.querySelectorAll('#home .quick-card');
+      const qKeys = [
+        ['live_prices','live_prices_sub'],
+        ['local_buyers','local_buyers_sub'],
+        ['demand_out','demand_out_sub'],
+        ['support_q','support_q_sub'],
+        ['subsidy_q','subsidy_q_sub']
+      ];
+      qc.forEach((card, i) => {
+        if (!qKeys[i]) return;
+        const h = card.querySelector('h3');
+        const p = card.querySelector('p');
+        if (h) h.textContent = t(qKeys[i][0]);
+        if (p) p.textContent = t(qKeys[i][1]);
+      });
+      // Section titles
+      const map = [
+        ['#home .section-head h2', 'top_prices'],
+        ['#home .section-head .link', 'see_all'],
+        ['#prices .section-head h2', 'prices_title'],
+        ['#buyers .section-head h2', 'buyers_title'],
+        ['#demand .section-head h2', 'demand_title'],
+        ['#support .section-head h2', 'support_title'],
+        ['#subsidy .section-head h2', 'subsidy_title'],
+        ['#about .section-head h2', 'about_title']
+      ];
+      map.forEach(([sel, key]) => {
+        const el = document.querySelector(sel);
+        if (el) el.textContent = t(key);
+      });
+      // Sub texts under section heads
+      const subMap = [
+        ['#prices > p', 'prices_sub'],
+        ['#buyers > p', 'buyers_sub'],
+        ['#demand > p', 'demand_sub'],
+        ['#support > p', 'support_sub'],
+        ['#subsidy > p', 'subsidy_sub']
+      ];
+      subMap.forEach(([sel, key]) => {
+        const el = document.querySelector(sel);
+        if (el) el.textContent = t(key);
+      });
+      // Tip boxes first on home
+      const tipStrong = document.querySelector('#home .tip-box strong');
+      const tipP = document.querySelector('#home .tip-box p');
+      if (tipStrong) tipStrong.textContent = t('tip_today');
+      if (tipP) tipP.textContent = t('tip_today_body');
+      // Language checkmarks
+      ['en','hi','cg'].forEach(l => {
+        const chk = document.getElementById('chk-' + l);
+        if (chk) chk.textContent = (l === currentLang) ? '✓' : '';
+        document.querySelectorAll('.lang-option').forEach(o => {
+          o.classList.toggle('active', o.dataset.lang === currentLang);
+        });
+      });
+      localStorage.setItem('lm_lang', currentLang);
+    }
+
+    function setLang(lang) {
+      currentLang = lang;
+      applyLang();
+      closeLang();
+      closeMenuAll();
+    }
+
+    function openMenu() {
+      document.getElementById('menuOverlay').classList.add('show');
+    }
+    function closeMenu(e) {
+      if (!e || e.target.id === 'menuOverlay') document.getElementById('menuOverlay').classList.remove('show');
+    }
+    function closeMenuAll() {
+      document.getElementById('menuOverlay').classList.remove('show');
+      closeLang();
+      closeProfile();
+    }
+    function openLanguage() {
+      document.getElementById('menuOverlay').classList.remove('show');
+      document.getElementById('langSheet').classList.add('show');
+      applyLang();
+    }
+    function closeLang() { document.getElementById('langSheet').classList.remove('show'); }
+    function openProfile() {
+      document.getElementById('menuOverlay').classList.remove('show');
+      document.getElementById('profileSheet').classList.add('show');
+      applyLang();
+    }
+    function closeProfile() { document.getElementById('profileSheet').classList.remove('show'); }
+
+    document.getElementById('langSheet').addEventListener('click', e => { if (e.target.id === 'langSheet') closeLang(); });
+    document.getElementById('profileSheet').addEventListener('click', e => { if (e.target.id === 'profileSheet') closeProfile(); });
+
+    // Init language on load
+    document.addEventListener('DOMContentLoaded', applyLang);
+    applyLang();
+
+    function goTo(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(t => t.classList.remove('active'));
+      document.getElementById(page).classList.add('active');
+      document.querySelectorAll('.nav-btn[data-page="'+page+'"]').forEach(t => t.classList.add('active'));
+      window.scrollTo(0, 0);
+    }
+    document.querySelectorAll('.nav-btn').forEach(el => {
+      el.addEventListener('click', () => goTo(el.dataset.page));
+    });
+    function openBuyer(name, rating, pay) {
+      document.getElementById('sheetName').textContent = 'Buyer Profile + Trust';
+      const n2 = document.getElementById('sheetName2');
+      if (n2) n2.textContent = name;
+      const av = document.getElementById('sheetAvatar');
+      if (av) av.textContent = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const sn = document.getElementById('sheetStarsNum');
+      if (sn) sn.textContent = rating;
+      const sn2 = document.getElementById('sheetStarsNum2');
+      if (sn2) sn2.textContent = rating;
+      const sp = document.getElementById('sheetPay');
+      if (sp) sp.textContent = pay + '%';
+      const sp2 = document.getElementById('sheetPay2');
+      if (sp2) sp2.textContent = pay + '%';
+      const sp3 = document.getElementById('sheetPay3');
+      if (sp3) sp3.textContent = pay + '%';
+      document.getElementById('buyerSheet').classList.add('show');
+    }
+    function closeSheet() { document.getElementById('buyerSheet').classList.remove('show'); }
+    document.getElementById('buyerSheet').addEventListener('click', e => { if (e.target.id === 'buyerSheet') closeSheet(); });
+    function submitComplaint() {
+      const buyer = document.getElementById('cBuyer').value;
+      const type = document.getElementById('cType').value;
+      if (!buyer || !type) { alert('Please select buyer and issue type'); return; }
+      document.getElementById('cSuccess').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('cSuccess').style.display = 'none';
+        document.getElementById('cBuyer').value = '';
+        document.getElementById('cType').value = '';
+        document.getElementById('cAmount').value = '';
+        document.getElementById('cDesc').value = '';
+      }, 4000);
+    }
+
+    // ----- Splash / Onboard / Auth -----
+    let onboardIdx = 0;
+    setTimeout(() => {
+      document.getElementById('splash').classList.add('hide');
+      if (!localStorage.getItem('lm_onboard_done')) {
+        document.getElementById('onboard').classList.add('show');
+      } else if (!localStorage.getItem('lm_logged_in')) {
+        document.getElementById('authScreen').classList.add('show');
+      }
+    }, 1600);
+
+    function nextOnboard() {
+      const slides = document.querySelectorAll('.onboard-slide');
+      const dots = document.querySelectorAll('.onboard-dots span');
+      slides[onboardIdx].classList.remove('active');
+      dots[onboardIdx].classList.remove('on');
+      onboardIdx++;
+      if (onboardIdx >= slides.length) {
+        skipOnboard();
+        return;
+      }
+      slides[onboardIdx].classList.add('active');
+      dots[onboardIdx].classList.add('on');
+      if (onboardIdx === slides.length - 1) document.getElementById('onboardNext').textContent = 'Get Started';
+    }
+    function skipOnboard() {
+      localStorage.setItem('lm_onboard_done', '1');
+      document.getElementById('onboard').classList.remove('show');
+      if (!localStorage.getItem('lm_logged_in')) document.getElementById('authScreen').classList.add('show');
+    }
+
+    function sendOTP() {
+      const ph = document.getElementById('loginPhone').value.trim();
+      if (!/^\d{10}$/.test(ph)) { alert('Enter valid 10-digit mobile'); return; }
+      document.getElementById('otpPhoneShow').textContent = '+91 ' + ph;
+      document.getElementById('phoneStep').style.display = 'none';
+      document.getElementById('otpStep').style.display = 'block';
+      document.getElementById('authSub').textContent = 'Enter OTP';
+    }
+    function backToPhone() {
+      document.getElementById('phoneStep').style.display = 'block';
+      document.getElementById('otpStep').style.display = 'none';
+      document.getElementById('authSub').textContent = 'Login with mobile number';
+    }
+    function otpTab(el, idx) {
+      if (el.value && el.nextElementSibling) el.nextElementSibling.focus();
+    }
+    function verifyOTP() {
+      const inputs = document.querySelectorAll('.otp-boxes input');
+      let code = '';
+      inputs.forEach(i => code += i.value);
+      if (code !== '1234') { alert('Invalid OTP. Demo OTP is 1234'); return; }
+      localStorage.setItem('lm_logged_in', '1');
+      localStorage.setItem('lm_phone', document.getElementById('loginPhone').value);
+      document.getElementById('authScreen').classList.remove('show');
+    }
+    function logout() {
+      localStorage.removeItem('lm_logged_in');
+      closeMenuAll();
+      document.getElementById('authScreen').classList.add('show');
+      backToPhone();
+    }
+
+    // ----- Offline -----
+    function updateOnline() {
+      const bar = document.getElementById('offlineBar');
+      if (!navigator.onLine) bar.classList.add('show');
+      else bar.classList.remove('show');
+    }
+    window.addEventListener('online', updateOnline);
+    window.addEventListener('offline', updateOnline);
+    updateOnline();
+
+    // ----- Dark mode -----
+    if (localStorage.getItem('lm_dark') === '1') document.body.classList.add('dark');
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      const on = document.body.classList.contains('dark');
+      localStorage.setItem('lm_dark', on ? '1' : '0');
+      const lbl = document.getElementById('darkLabel');
+      if (lbl) lbl.textContent = on ? 'Light Mode' : 'Dark Mode';
+    }
+    (function(){ const lbl = document.getElementById('darkLabel');
+      if (lbl && document.body.classList.contains('dark')) lbl.textContent = 'Light Mode'; })();
+
+    // ----- Notifications -----
+    function openNotifs() { document.getElementById('notifSheet').classList.add('show'); document.getElementById('notifBadge').style.display='none'; }
+    function closeNotifs() { document.getElementById('notifSheet').classList.remove('show'); }
+    document.getElementById('notifSheet').addEventListener('click', e => { if (e.target.id==='notifSheet') closeNotifs(); });
+
+    // ----- Sell -----
+    function openSell() { document.getElementById('sellSheet').classList.add('show'); }
+    function closeSell() { document.getElementById('sellSheet').classList.remove('show'); }
+    document.getElementById('sellSheet').addEventListener('click', e => { if (e.target.id==='sellSheet') closeSell(); });
+    function postCrop() {
+      const crop = document.getElementById('sellCrop').value;
+      const grade = (document.querySelector('input[name="sellGrade"]:checked')||{}).value || 'B';
+      const qty = document.getElementById('sellQty').value;
+      const rate = document.getElementById('sellRate').value;
+      if (!qty || !rate) { alert('Enter quantity and expected rate'); return; }
+      alert('Posted: ' + qty + ' Qtl ' + crop + ' Grade ' + grade + ' @ ₹' + rate + '/Qtl\\nNearby buyers will see your listing.');
+      closeSell();
+      document.getElementById('sellQty').value = '';
+      document.getElementById('sellRate').value = '';
+    }
+
+    // ----- Deal flow -----
+    let dealData = {};
+    function startDeal(buyer, crop, grade, rate) {
+      dealData = { buyer, crop, grade, rate };
+      document.getElementById('dealBuyerName').textContent = buyer;
+      document.getElementById('dealCropLine').textContent = crop + ' • Grade ' + grade;
+      document.getElementById('dealRateShow').textContent = '₹' + rate.toLocaleString('en-IN');
+      document.getElementById('dealStep1').style.display = 'block';
+      document.getElementById('dealStep2').style.display = 'none';
+      document.getElementById('dealStep3').style.display = 'none';
+      document.getElementById('ds1').className = 'deal-step on';
+      document.getElementById('ds2').className = 'deal-step';
+      document.getElementById('ds3').className = 'deal-step';
+      document.getElementById('dealSheet').classList.add('show');
+    }
+    function dealAccept() {
+      document.getElementById('dealStep1').style.display = 'none';
+      document.getElementById('dealStep2').style.display = 'block';
+      document.getElementById('ds1').className = 'deal-step done';
+      document.getElementById('ds2').className = 'deal-step on';
+    }
+    function dealConfirm() {
+      const qty = document.getElementById('dealQty').value;
+      if (!qty) { alert('Enter quantity'); return; }
+      const total = Number(qty) * dealData.rate;
+      document.getElementById('dealSummary').textContent =
+        qty + ' Qtl ' + dealData.crop + ' Grade ' + dealData.grade + ' with ' + dealData.buyer +
+        '\\nTotal ≈ ₹' + total.toLocaleString('en-IN');
+      document.getElementById('dealStep2').style.display = 'none';
+      document.getElementById('dealStep3').style.display = 'block';
+      document.getElementById('ds2').className = 'deal-step done';
+      document.getElementById('ds3').className = 'deal-step on';
+    }
+    function closeDeal() { document.getElementById('dealSheet').classList.remove('show'); }
+    document.getElementById('dealSheet').addEventListener('click', e => { if (e.target.id==='dealSheet') closeDeal(); });
+
+    // ----- Review -----
+    function openReview(buyer) {
+      document.getElementById('reviewBuyerLabel').textContent = buyer;
+      document.getElementById('starPick').textContent = '☆☆☆☆☆';
+      document.getElementById('reviewStars').value = '0';
+      document.getElementById('reviewText').value = '';
+      document.getElementById('reviewSheet').classList.add('show');
+    }
+    function closeReview() { document.getElementById('reviewSheet').classList.remove('show'); }
+    document.getElementById('reviewSheet').addEventListener('click', e => { if (e.target.id==='reviewSheet') closeReview(); });
+    function pickStar(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const n = Math.min(5, Math.max(1, Math.ceil(x / rect.width * 5)));
+      document.getElementById('reviewStars').value = n;
+      document.getElementById('starPick').textContent = '★'.repeat(n) + '☆'.repeat(5-n);
+    }
+    function submitReview() {
+      const n = document.getElementById('reviewStars').value;
+      if (n === '0') { alert('Please select stars'); return; }
+      alert('Thank you! Your ' + n + '-star review was submitted.');
+      closeReview();
+    }
+
+    // ----- Map -----
+    function openMap() { document.getElementById('mapSheet').classList.add('show'); }
+    function closeMap() { document.getElementById('mapSheet').classList.remove('show'); }
+    document.getElementById('mapSheet').addEventListener('click', e => { if (e.target.id==='mapSheet') closeMap(); });
+
+    // ----- Live prices (refresh + optional API) -----
+    async function refreshLivePrices() {
+      const btn = document.querySelector('.refresh-live');
+      if (btn) btn.textContent = '↻ Loading...';
+      // Try a public dataset; fallback to simulated live tick
+      try {
+        // Simulated live variation (no reliable free CORS mandi API)
+        document.querySelectorAll('#prices .price-val').forEach(el => {
+          const raw = el.textContent.replace(/[₹,]/g, '');
+          let n = parseInt(raw, 10);
+          if (!n) return;
+          const delta = Math.floor(Math.random() * 21) - 10; // -10 to +10
+          n = Math.max(100, n + delta);
+          el.textContent = '₹' + n.toLocaleString('en-IN');
+        });
+        if (btn) btn.textContent = '↻ Updated just now';
+        setTimeout(() => { if (btn) btn.textContent = '↻ Refresh live'; }, 2500);
+      } catch (e) {
+        if (btn) btn.textContent = '↻ Refresh live';
+        alert('Could not refresh. Showing last saved prices.');
+      }
+    }
+
+    function handleSearch() {
+      const q = document.getElementById('globalSearch').value.toLowerCase();
+      if (!q) return;
+      if (q.includes('wheat') || q.includes('गेहूं') || q.includes('soy') || q.includes('paddy') || q.includes('maize')) goTo('prices');
+      else if (q.includes('buyer') || q.includes('खरीद') || q.includes('trader')) goTo('buyers');
+    }
+  </script>
+</body>
+</html>
